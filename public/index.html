@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clinic Booking</title>
+<style>
+  :root { --bg:#f6f8f7; --card:#fff; --ink:#14201b; --muted:#5b6b64; --brand:#0f766e; --brand-ink:#fff; --line:#dbe3df; --err:#b42318; --ok:#067647; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0e1512; --card:#16201b; --ink:#e8f0ec; --muted:#9bb0a7; --brand:#2dd4bf; --brand-ink:#04211c; --line:#27352e; --err:#ff8a80; --ok:#6ee7a8; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; } h2 { font-size: 1.1rem; margin: 0 0 12px; }
+  p.sub { color:var(--muted); margin:0 0 20px; }
+  section { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px; }
+  label { display:block; font-size:.875rem; color:var(--muted); margin-bottom:10px; }
+  input, select { width:100%; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--ink); font:inherit; }
+  button { padding:10px 16px; border:0; border-radius:8px; background:var(--brand); color:var(--brand-ink); font:inherit; font-weight:600; cursor:pointer; }
+  button.ghost { background:transparent; color:var(--ink); border:1px solid var(--line); }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:end; } .row > * { flex:1 1 160px; } .row > button { flex:0 0 auto; }
+  ul { list-style:none; margin:0; padding:0; }
+  .slot { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px 0; border-top:1px solid var(--line); }
+  .slot:first-child { border-top:0; } .slot small { color:var(--muted); display:block; }
+  .tag { font-size:.75rem; padding:2px 8px; border-radius:999px; border:1px solid var(--line); color:var(--muted); }
+  .msg { padding:10px 12px; border-radius:8px; margin-top:12px; border:1px solid var(--line); }
+  .msg.err { color:var(--err); border-color:var(--err); } .msg.ok { color:var(--ok); border-color:var(--ok); }
+  .hidden { display:none; } dl { margin:8px 0 0; display:grid; grid-template-columns:auto 1fr; gap:4px 12px; } dt { color:var(--muted); } dd { margin:0; word-break:break-all; }
+  :focus-visible { outline:2px solid var(--brand); outline-offset:2px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Book a clinic appointment</h1>
+  <p class="sub">Pick an available slot, enter your details, and get an instant confirmation.</p>
+
+  <section id="keyBox">
+    <h2>API key</h2>
+    <div class="row">
+      <label>Key<input id="apiKey" type="password" autocomplete="off" placeholder="X-API-Key"></label>
+      <button id="saveKey">Use key</button>
+    </div>
+  </section>
+
+  <section>
+    <div class="row">
+      <label>Provider<select id="provider"><option value="">All providers</option></select></label>
+      <button class="ghost" id="refresh">Refresh</button>
+    </div>
+    <ul id="slots" aria-live="polite"></ul>
+  </section>
+
+  <section id="formBox" class="hidden">
+    <h2>Your details</h2>
+    <p id="chosen" class="sub"></p>
+    <form id="form">
+      <label>Full name<input id="name" required autocomplete="name"></label>
+      <label>Email<input id="email" type="email" required autocomplete="email"></label>
+      <div class="row"><button id="submit" type="submit">Confirm booking</button><button type="button" class="ghost" id="cancelForm">Cancel</button></div>
+    </form>
+    <div id="formMsg" role="alert"></div>
+  </section>
+
+  <section id="confirmBox" class="hidden">
+    <h2>Booking confirmed</h2>
+    <dl id="confirm"></dl>
+    <div class="row" style="margin-top:12px"><button class="ghost" id="cancelBooking">Cancel this booking</button></div>
+    <div id="confirmMsg" role="status"></div>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
